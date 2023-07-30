@@ -12,7 +12,7 @@ from pyrogram.types import (InlineKeyboardButton,
                             InlineKeyboardMarkup, Message)
 
 from IroX import app
-from config import OWNER_ID as SUDOERS
+from IroX.misc import SUDOERS
 
 
 async def aexec(code, client, message):
@@ -31,7 +31,7 @@ async def edit_or_reply(msg: Message, **kwargs):
 
 @app.on_message(
     filters.command("eval")
-    & filters.user(SUDOERS)
+    & SUDOERS
     & ~filters.forwarded
     & ~filters.via_bot
 )
@@ -139,7 +139,7 @@ async def forceclose_command(_, CallbackQuery):
 
 @app.on_message(
     filters.command("sh")
-    & ~filters.user(SUDOERS)
+    & SUDOERS
     & ~filters.forwarded
     & ~filters.via_bot
 )
