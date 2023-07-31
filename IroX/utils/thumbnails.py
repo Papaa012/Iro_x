@@ -1,13 +1,13 @@
 import os
 import re
 import textwrap
-import numpy as np
+
 import aiofiles
 import aiohttp
 from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter,
                  ImageFont, ImageOps)
 from youtubesearchpython.__future__ import VideosSearch
-from IroX import app
+
 from config import MUSIC_BOT_NAME, YOUTUBE_IMG_URL
 
 
@@ -57,71 +57,35 @@ async def gen_thumb(videoid, user_id):
                     await f.write(await resp.read())
                     await f.close()
 
-        try:
-            wxyz = await app.get_profile_photos(user_id)
-            wxy = await app.download_media(wxyz[0]['file_id'], file_name=f'{user_id}.jpg')
-        except:
-            hehe = await app.get_profile_photos(app.id)
-            wxy = await app.download_media(hehe[0]['file_id'], file_name=f'{app.id}.jpg')
-        xy = Image.open(wxy)
-        a = Image.new('L', [640, 640], 0)
-        b = ImageDraw.Draw(a)
-        b.pieslice([(0, 0), (640,640)], 0, 360, fill = 255, outline = "white")
-        c = np.array(xy)
-        d = np.array(a)
-        e = np.dstack((c, d))
-        f = Image.fromarray(e)
-        x = f.resize((140, 140))
-        
-        try:
-            xyz = await app.get_profile_photos(app.id)
-            xy = await app.download_media(xyz[0]['file_id'], file_name=f'{app.id}.jpg')
-        except:
-            he = await app.get_profile_photos(app.id)
-            xy = await app.download_media(he[0]['file_id'], file_name=f'{app.id}.jpg')
-        yz = Image.open(xy)
-        j = Image.new('L', [640, 640], 0)
-        k = ImageDraw.Draw(j)
-        k.pieslice([(0, 0), (640,640)], 0, 360, fill = 255, outline = "white")
-        l = np.array(yz)
-        m = np.array(j)
-        n = np.dstack((l, m))
-        o = Image.fromarray(n)
-        p = o.resize((100, 100))
-
         youtube = Image.open(f"cache/thumb{videoid}.png")
-        image1 = changeImageSize(1280, 720, youtube)  
-        sex = changeImageSize(900, 380, youtube)
+        image1 = changeImageSize(1280, 720, youtube)
+        sex = changeImageSize(940, 420, youtube)
         image2 = image1.convert("RGBA")
-        background = image2.filter(filter=ImageFilter.BoxBlur(10))
+        background = image2.filter(filter=ImageFilter.BoxBlur(30))
         enhancer = ImageEnhance.Brightness(background)
         background = enhancer.enhance(0.8)
-        logo = ImageOps.expand(sex, border=10, fill="white")
-        background.paste(logo, (177, 115))
-        background.paste(p, (30, 15), mask=p)
-        background.paste(x, (1060, 550), mask=x)
+        logo = ImageOps.expand(sex, border=15, fill="grey")
+        background.paste(logo, (150, 80))
 
         draw = ImageDraw.Draw(background)
-        font = ImageFont.truetype("IroX/assets/font2.ttf", 40)
+        font = ImageFont.truetype("IroX/assets/font2.ttf", 30)
         font2 = ImageFont.truetype("IroX/assets/font2.ttf", 30)
-        arial = ImageFont.truetype("IroX/assets/font2.ttf", 35)
+        arial = ImageFont.truetype("IroX/assets/font2.ttf", 30)
         name_font = ImageFont.truetype("IroX/assets/font.ttf", 30)
         para = textwrap.wrap(title, width=32)
         j = 0
-
-
         draw.text(
-            (160, 35), f"IRO MUSIC", fill="white", font=name_font
+            (1065, 5), f"IRO MUSIC", fill="white", font=name_font
         )
 
         draw.text(
-            (50, 610),
-            f"{title[:30]}",
+            (50, 600),
+            f"{title}",
             fill="white",
             stroke_fill="white",
             font=font,
         )
-        
+
         draw.text(
             (50, 565),
             f"{channel} | {views[:23]}",
@@ -130,22 +94,22 @@ async def gen_thumb(videoid, user_id):
         )
    
         draw.text(
-            (50, 660),
+            (50, 640),
             f"00:00",
             (255, 255, 255),
             stroke_width=1,
-            stroke_fill="white",
+            stroke_fill="pink",
             font=font2,
         )
         draw.text(
-            (600, 660),
+            (1150, 640),
             f"{duration[:23]}",
             (255, 255, 255),
             stroke_width=1,
-            stroke_fill="white",
+            stroke_fill="pink",
             font=font2,
         )
-        draw.line((150,680, 585,680), width=6, fill="white")
+        draw.line((150,660, 1130,660), width=6, fill="white")
         try:
             os.remove(f"cache/thumb{videoid}.png")
         except:
@@ -204,7 +168,7 @@ async def gen_qthumb(videoid, user_id):
 
         draw = ImageDraw.Draw(background)
         font = ImageFont.truetype("IroX/assets/font2.ttf", 30)
-        font2 = ImageFont.truetype("IroX/assets/font2.ttf", 30)
+        font2 = ImageFont.truetype("IroXassets/font2.ttf", 30)
         arial = ImageFont.truetype("IroX/assets/font2.ttf", 30)
         name_font = ImageFont.truetype("IroX/assets/font.ttf", 30)
         para = textwrap.wrap(title, width=32)
