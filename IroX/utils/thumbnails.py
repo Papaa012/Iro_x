@@ -7,7 +7,7 @@ import aiohttp
 from PIL import (Image, ImageDraw, ImageEnhance, ImageFilter,
                  ImageFont, ImageOps)
 from youtubesearchpython.__future__ import VideosSearch
-from IroX import app
+from FallenMusic import app
 from config import MUSIC_BOT_NAME, YOUTUBE_IMG_URL
 
 
@@ -71,7 +71,7 @@ async def gen_thumb(videoid, user_id):
         d = np.array(a)
         e = np.dstack((c, d))
         f = Image.fromarray(e)
-        x = f.resize((160, 160))
+        x = f.resize((140, 140))
         
         try:
             xyz = await app.get_profile_photos(app.id)
@@ -91,12 +91,15 @@ async def gen_thumb(videoid, user_id):
 
         youtube = Image.open(f"cache/thumb{videoid}.png")
         image1 = changeImageSize(1280, 720, youtube)  
+        sex = changeImageSize(900, 380, youtube)
         image2 = image1.convert("RGBA")
         background = image2.filter(filter=ImageFilter.BoxBlur(10))
         enhancer = ImageEnhance.Brightness(background)
-        background = enhancer.enhance(0.5)
+        background = enhancer.enhance(0.8)
+        logo = ImageOps.expand(sex, border=10, fill="white")
+        background.paste(logo, (177, 115))
         background.paste(p, (30, 15), mask=p)
-        background.paste(x, (1060, 530), mask=x)
+        background.paste(x, (1060, 550), mask=x)
 
         draw = ImageDraw.Draw(background)
         font = ImageFont.truetype("IroX/assets/font2.ttf", 40)
@@ -112,7 +115,7 @@ async def gen_thumb(videoid, user_id):
         )
 
         draw.text(
-            (50, 590),
+            (50, 610),
             f"{title[:30]}",
             fill="white",
             stroke_fill="white",
@@ -120,14 +123,14 @@ async def gen_thumb(videoid, user_id):
         )
         
         draw.text(
-            (50, 545),
+            (50, 565),
             f"{channel} | {views[:23]}",
             (255, 255, 255),
             font=arial,
         )
    
         draw.text(
-            (50, 640),
+            (50, 660),
             f"00:00",
             (255, 255, 255),
             stroke_width=1,
@@ -135,14 +138,14 @@ async def gen_thumb(videoid, user_id):
             font=font2,
         )
         draw.text(
-            (600, 640),
+            (600, 660),
             f"{duration[:23]}",
             (255, 255, 255),
             stroke_width=1,
             stroke_fill="white",
             font=font2,
         )
-        draw.line((150,660, 585,660), width=6, fill="white")
+        draw.line((150,680, 585,680), width=6, fill="white")
         try:
             os.remove(f"cache/thumb{videoid}.png")
         except:
